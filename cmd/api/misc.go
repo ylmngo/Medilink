@@ -1,7 +1,11 @@
 package main
 
 import (
+	"compress/gzip"
+	"errors"
 	"fmt"
+	"io"
+	"mime/multipart"
 	"net/http"
 	"os"
 	"strconv"
@@ -74,9 +78,9 @@ func (app *application) fileViewer(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	bytes, err := os.ReadFile(fmt.Sprintf("uploads/%s%s", file.Name, file.Extension))
+	bytes, err := app.unzip(file.Name)
 	if err != nil {
-		app.logger.Printf("Unable to get file from disk: %v\n", err)
+		app.logger.Printf("Unable to unzip file: %v\n", err)
 		return
 	}
 
@@ -84,4 +88,43 @@ func (app *application) fileViewer(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", contentType)
 	w.Write(bytes)
+}
+
+// Create a zip file in uploads directory as UUID.gz
+func (app *application) zip(fileName string, formFile multipart.File) error {
+	dst, err := os.Create(fmt.Sprintf("./uploads/%s.gz", fileName))
+	if err != nil {
+		return errors.New("unable to create destination file")
+	}
+	defer dst.Close()
+
+	fileBytes, err := io.ReadAll(formFile)
+	if err != nil {
+		return errors.New("unable to read form file")
+	}
+
+	w := gzip.NewWriter(dst)
+	defer w.Close()
+
+	w.Write(fileBytes)
+
+	return nil
+}
+
+// Unzips file from uploads directory and return the uncompressed bytes
+func (app *application) unzip(file string) ([]byte, error) {
+	zipFile, err := os.Open(fmt.Sprintf("uploads/%s.gz", file))
+	if err != nil {
+		return nil, errors.New("unable to open zip file")
+	}
+	defer zipFile.Close()
+
+	gz, err := gzip.NewReader(zipFile)
+	if err != nil {
+		return nil, errors.New("unable to create gzip reader from zip file")
+	}
+	defer gz.Close()
+
+	bytes, err := io.ReadAll(gz)
+	return bytes, err
 }

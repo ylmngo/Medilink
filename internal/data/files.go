@@ -30,8 +30,8 @@ const SCAN = "scan"
 // ================== FileModel Methods =====================
 
 func (fm *FileModel) Insert(file *File) error {
-	query := `INSERT INTO files (user_id, name, ext, cat, prev_name) VALUES ($1, $2, $3, $4, $5) RETURNING file_id;`
-	args := []interface{}{file.UserId, file.Name, file.Extension, file.Category, file.PrevName}
+	query := `INSERT INTO files (user_id, name, ext, cat, prev_name, type) VALUES ($1, $2, $3, $4, $5, $6) RETURNING file_id;`
+	args := []interface{}{file.UserId, file.Name, file.Extension, file.Category, file.PrevName, file.Type}
 	err := fm.DB.QueryRow(query, args...).Scan(&file.FileId)
 	if err != nil {
 		return err
@@ -77,10 +77,10 @@ func (fm *FileModel) GetCategoriesByUser(userId int, ftype string) ([]string, er
 	return categories, nil
 }
 
-func (fm *FileModel) GetFilesByCategory(cat string, ftype string) ([]File, error) {
+func (fm *FileModel) GetUserFilesByCategory(userId int, cat, ftype string) ([]File, error) {
 	var files []File
-	query := `SELECT * FROM files WHERE cat = ($1) and type = ($2)`
-	rows, err := fm.DB.Query(query, cat, ftype)
+	query := `SELECT * FROM files WHERE cat = ($1) and type = ($2) and user_id = ($3)`
+	rows, err := fm.DB.Query(query, cat, ftype, userId)
 	if err != nil {
 		return nil, err
 	}
@@ -107,6 +107,8 @@ func (fm *FileModel) GetFilesByCategory(cat string, ftype string) ([]File, error
 // ================== File Methods =========================
 
 // create a new instance of File Struct
+// ftype: 'scan/report' or 'prescription'
+// category: 'general', 'orthopeodic' etc....
 func NewFile(file multipart.File, header *multipart.FileHeader, category string, userId int, ftype string) *File {
 	return &File{
 		UserId:    userId,
