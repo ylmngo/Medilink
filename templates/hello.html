@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="../static/scan.css">
+</head>
+<body>
+  <button class="btn" onmouseover="changeText(this, 'Upload')" onmouseout="resetText(this, 'ENT')" onclick="redirectToPage('upload/ENT')"> ENT
+  </button>
+  <button class="btn" onmouseover="changeText(this, 'Upload')" onmouseout="resetText(this, 'Psychiatry')" onclick="redirectToPage('upload/Psychiatry')"> Psychiatry
+  </button>
+  <br>
+  <button class="btn" onmouseover="changeText(this, 'Upload')" onmouseout="resetText(this, 'Critical Care')" onclick="redirectToPage('upload/Critical')"> Critical Care
+  </button>
+  <button class="btn" onmouseover="changeText(this, 'Upload')" onmouseout="resetText(this, 'Emergency')" onclick="redirectToPage('upload/Emergency')"> Emergency
+  </button>
+  <br>
+  <button class="btn" onmouseover="changeText(this, 'Upload')" onmouseout="resetText(this, 'Gynaecology')" onclick="redirectToPage('upload/Gynaecology')"> Gynaecology
+  </button>
+  <button class="btn" onmouseover="changeText(this, 'Upload')" onmouseout="resetText(this, 'Gastroentrology')" onclick="redirectToPage('upload/Gastroentrology')"> Gastroentrology
+  </button>
+  <br>
+  <button class="btn" onmouseover="changeText(this, 'Upload')" onmouseout="resetText(this, 'Paediatrics')" onclick="redirectToPage('upload/Paediatrics')"> Paediatrics
+  </button>
+  <button class="btn" onmouseover="changeText(this, 'Upload')" onmouseout="resetText(this, 'Pharmacy')" onclick="redirectToPage('upload/Pharmacy')"> Pharmacy
+  </button>
+  <br>
+  <button class="btn" onmouseover="changeText(this, 'Upload')" onmouseout="resetText(this, 'Anesthesiology Department')" onclick="redirectToPage('upload/Anesthesiology')"> Anesthesiology Department
+  </button>
+  <button class="btn" onmouseover="changeText(this, 'Upload')" onmouseout="resetText(this, 'Elderly Services')" onclick="redirectToPage('upload/ElderlyServices')"> Elderly Services
+  </button>
+  <br>
+  <button class="btn" onmouseover="changeText(this, 'Upload')" onmouseout="resetText(this, 'Clinical Nutrition')" onclick="redirectToPage('upload/Clinic')"> Clinical Nutrition
+  </button>
+  <button class="btn" onmouseover="changeText(this, 'Upload')" onmouseout="resetText(this, 'Laboratory Medicine')" onclick="redirectToPage('upload/LabMed')"> Laboratory Medicine 
+  </button>
+  <br>
+  <button class="btn" onmouseover="changeText(this, 'Upload')" onmouseout="resetText(this, 'Microbiology')" onclick="redirectToPage('upload/Microbiology')"> Microbiology
+  </button>
+  <button class="btn" onmouseover="changeText(this, 'Upload')" onmouseout="resetText(this, 'Radiology')" onclick="redirectToPage('upload/Radiology')"> Radiology
+  </button>
+  <br>
+  <button class="btn" onmouseover="changeText(this, 'Upload')" onmouseout="resetText(this, 'General Surgery')" onclick="redirectToPage('upload/Surgery')"> General Surgery
+  </button>
+  <button class="btn" onmouseover="changeText(this, 'Upload')" onmouseout="resetText(this, 'Physiotherapy')" onclick="redirectToPage('upload/Physiotherapy')"> Physiotherapy
+  </button>
+  <br>
+  <button class="btn" onmouseover="changeText(this, 'Upload')" onmouseout="resetText(this, 'Orthodopaedics')" onclick="redirectToPage('upload/Orthodopaedics')"> Orthodopaedics
+  </button>
+  <button class="btn" onmouseover="changeText(this, 'Upload')" onmouseout="resetText(this, 'Neurology')" onclick="redirectToPage('upload/Neurology')"> Neurology
+  </button>
+  <br>
+  <button class="btn" onmouseover="changeText(this, 'Upload')" onmouseout="resetText(this, 'Opthalmology')" onclick="redirectToPage('upload/Ophthalmology')"> Ophthalmology
+  </button>
+  <button class="btn" onmouseover="changeText(this, 'Upload')" onmouseout="resetText(this, 'Urology')" onclick="redirectToPage('upload/Urology')"> Urology
+  </button>
+  
+  <script>
+    function changeText(button, newText) {
+      button.innerText = newText;
+    }
+    function resetText(button, originalText) {
+      button.innerText = originalText;
+    }
+    function redirectToPage(targetPage) {
+      window.location.href = targetPage;
+    }
+  </script>
+</body>
+</html>

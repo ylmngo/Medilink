@@ -128,3 +128,32 @@ func (app *application) unzip(file string) ([]byte, error) {
 	bytes, err := io.ReadAll(gz)
 	return bytes, err
 }
+
+func (app *application) tryHandler(w http.ResponseWriter, r *http.Request) {
+	if err := r.ParseMultipartForm(32 << 20); err != nil {
+		fmt.Println("Error while parsing multipart form")
+		return
+	}
+	files := r.MultipartForm.File["files[]"]
+	for _, header := range files {
+		file, err := header.Open()
+		if err != nil {
+			fmt.Printf("Unable to open file: %v\n", err)
+			return
+		}
+		defer file.Close()
+
+		err = app.zip(header.Filename, file)
+		if err != nil {
+			app.logger.Printf("Unable to zip file: %s, %v\n", err.Error(), err)
+			return
+		}
+
+		fmt.Println("Uploaded file")
+	}
+}
+
+func (app *application) tryUploadHandler(w http.ResponseWriter, r *http.Request) {
+	tmpl, _ := template.ParseFiles("templates/target.html")
+	tmpl.Execute(w, nil)
+}

@@ -42,10 +42,10 @@ func main() {
 
 	flag.StringVar(&cfg.db, "db", "postgres://postgres:freeroam@localhost/tg?sslmode=disable", "Database Connection String")
 
-	flag.StringVar(&cfg.smtp.host, "smtp-host", "sandbox.smtp.mailtrap.io", "SMTP Host")
+	flag.StringVar(&cfg.smtp.host, "smtp-host", "smtp.gmail.com", "SMTP Host")
 	flag.IntVar(&cfg.smtp.port, "smtp-port", 2525, "SMTP Port")
 	flag.StringVar(&cfg.smtp.username, "smtp-username", "ed7f23147046f3", "SMTP Username")
-	flag.StringVar(&cfg.smtp.password, "smtp-password", "14c3b7d8c6c7e1", "SMTP Password")
+	flag.StringVar(&cfg.smtp.password, "smtp-password", "nvmu vdjw vmfz dpla", "SMTP Password")
 	flag.StringVar(&cfg.smtp.sender, "smtp-sender", "aamerasim45@gmail.com", "SMTP Sender")
 
 	db, err := OpenDB(cfg.db)
@@ -59,7 +59,7 @@ func main() {
 	app.cfg = cfg
 	app.logger = log.New(os.Stdout, "", log.Ldate|log.Ltime)
 	app.model = data.NewModel(db)
-	app.mailer = mail.NewMailer(cfg.smtp.host, cfg.smtp.port, cfg.smtp.username, cfg.smtp.password, cfg.smtp.sender)
+	app.mailer = mail.InitMailer(cfg.smtp.sender, cfg.smtp.password, cfg.smtp.host)
 
 	app.logger.Println("Application succesfully Initialized")
 	router := app.route()

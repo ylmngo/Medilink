@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"lp3/internal/data"
 	"net/http"
+	"text/template"
+	"time"
 )
 
 func (app *application) registerHandler(w http.ResponseWriter, r *http.Request) {
@@ -53,14 +55,28 @@ func (app *application) loginHandler(w http.ResponseWriter, r *http.Request) {
 
 // TODO: send email or sms to user's email or phone number, reminding them
 func (app *application) reminderHandler(w http.ResponseWriter, r *http.Request) {
-	user, err := app.getUserFromCookie(r)
+	// user, _ := app.getUserFromCookie(r)
+
+	tmpl, err := template.ParseFiles("templates/reminders.html")
 	if err != nil {
-		app.logger.Printf("Unable to retrieve user from cookie: %v\n", err)
+		app.logger.Printf("Unable to locate template file: %v\n", err)
 		return
 	}
-	err = app.mailer.Send(user.Email, user.Name)
-	if err != nil {
-		app.logger.Printf("Unable to send mail to user: %v\n", err)
-		return
-	}
+	tmpl.Execute(w, nil)
+
+	// err := app.mailer.Send(user.Email, user.Name)
+	// if err != nil {
+	// 	app.logger.Printf("Unable to send mail to user: %v\n", err)
+	// 	return
+	// }
+}
+
+func (app *application) setReminderHandler(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	appointmentDate, _ := time.Parse("2006-01-02", r.FormValue("appointmentDate"))
+	appointmentTime, _ := time.Parse("15:04", r.FormValue("appointmentTime"))
+
+	fmt.Println(appointmentDate.Date())
+	fmt.Println(appointmentTime.Clock())
+	http.Redirect(w, r, "../../", http.StatusFound)
 }
