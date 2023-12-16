@@ -18,6 +18,7 @@ func (app *application) route() *mux.Router {
 	router.HandleFunc("/prescriptions/category/{cat}", app.checkUser(app.categoryHandler))
 	router.HandleFunc("/prescriptions/category/file/{id}", app.fileViewer)
 	router.HandleFunc("/scans", app.checkUser(app.scanHandler))
+	// router.HandleFunc("/scans/{cat}", app.checkUser(app.ScanCatHandler))
 	router.HandleFunc("/scans/upload", app.checkUser(app.scanUploadHandler))
 	router.HandleFunc("/scans/upload/{cat}", app.checkUser(app.scanCatUploadHandler))
 	router.HandleFunc("/reminders", app.reminderHandler)

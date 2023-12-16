@@ -12,6 +12,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/go-co-op/gocron"
 	_ "github.com/lib/pq"
 )
 
@@ -29,10 +30,11 @@ type config struct {
 }
 
 type application struct {
-	cfg    config
-	logger *log.Logger
-	model  *data.Model
-	mailer *mail.Mailer
+	cfg       config
+	logger    *log.Logger
+	model     *data.Model
+	mailer    *mail.Mailer
+	scheduler *gocron.Scheduler
 }
 
 func main() {
@@ -60,6 +62,7 @@ func main() {
 	app.logger = log.New(os.Stdout, "", log.Ldate|log.Ltime)
 	app.model = data.NewModel(db)
 	app.mailer = mail.InitMailer(cfg.smtp.sender, cfg.smtp.password, cfg.smtp.host)
+	app.scheduler = gocron.NewScheduler(time.UTC)
 
 	app.logger.Println("Application succesfully Initialized")
 	router := app.route()
@@ -72,25 +75,7 @@ func main() {
 		IdleTimeout:  time.Minute,
 	}
 
-	// // ================================== !! =======================
-	// app.logger.Println("sending mail via net/smtp")
-	// subject := "Simple HTML Email"
-	// body := "Here is a simple plain text"
-	// sender := "gapi@mywebsite.com"
-	// recipient := []string{
-	// 	"a4mer.2a45@gmail.com",
-	// }
-	// message := fmt.Sprintf("From: %s\r\n", sender)
-	// message += fmt.Sprintf("To: %s\r\n", recipient)
-	// message += fmt.Sprintf("Subject: %s\r\n", subject)
-	// message += fmt.Sprintf("\r\n%s\r\n", body)
-	// auth := smtp.PlainAuth("", cfg.smtp.username, cfg.smtp.password, cfg.smtp.host)
-	// addr := fmt.Sprintf("%s:%d", cfg.smtp.host, cfg.smtp.port)
-	// if err = smtp.SendMail(addr, auth, sender, recipient, []byte(message)); err != nil {
-	// 	app.logger.Printf("Unable to send mail: %v\n", err)
-	// }
-	// // ================================== !! =======================
-	// app.logger.Println("Sent Mail")
+	go app.runScheduler()
 
 	err = srv.ListenAndServe()
 	if err != nil {

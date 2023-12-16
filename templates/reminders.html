@@ -112,7 +112,48 @@
                 margin-bottom: 20px;
             }
         }
+
+        
     </style>
+    /* Reminders View */
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&amp;display=swap">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.standalone.min.css">
+    <style>
+      
+      .add-todo-input,
+      .edit-todo-input {
+          outline: none;
+      }
+      
+      .add-todo-input:focus,
+      .edit-todo-input:focus {
+          border: none !important;
+          box-shadow: none !important;
+      }
+      
+      .view-opt-label,
+      .date-label {
+          font-size: 0.8rem;
+      }
+      
+      .edit-todo-input {
+          font-size: 1.7rem !important;
+      }
+      
+      .todo-actions {
+          visibility: hidden !important;
+      }
+      
+      .todo-item:hover .todo-actions {
+          visibility: visible !important;
+      }
+      
+      .todo-item.editing .todo-actions .edit-icon {
+          display: none !important;
+      }
+      </style>
 </head>
 <body>
     <header>
@@ -170,9 +211,50 @@
         </div>
     </section>
 
-    <footer>
+    <div style="line-height: 1.6;">
+        <div class="row mx-1 px-5 pb-3 w-80">
+            <div class="col mx-auto">
+                <!-- Todo Item 1 -->
+                <h2 style="padding-left: 4%;">Reminders: </h2>
+                {{ range $r := .}}
+                    <div class="row px-3 align-items-center todo-item rounded">
+                        <div class="col-auto m-1 p-0 d-flex align-items-center">
+                            <!-- <h2 class="m-0 p-0">
+                                <i class="fa fa-square-o text-primary btn m-0 p-0 d-none" data-toggle="tooltip" data-placement="bottom" title="Mark as complete"></i>
+                                <i class="fa fa-check-square-o text-primary btn m-0 p-0" data-toggle="tooltip" data-placement="bottom" title="Mark as todo"></i>
+                            </h2> -->
+                        </div>
+                        <div class="col px-1 m-1 d-flex align-items-center">
+                            <input type="text" class="form-control form-control-lg border-0 edit-todo-input bg-transparent rounded px-3" readonly value="{{ $r.Note }}" title="{{ $r.Note }}" />
+                            <input type="text" class="form-control form-control-lg border-0 edit-todo-input rounded px-3 d-none" value="{{$r.Note}}" />
+                        </div>
+                        <div class="col-auto m-1 p-0 px-3 d-none">
+                        </div>
+                        <div class="col-auto m-1 p-0 todo-actions">
+                            <div class="row d-flex align-items-center justify-content-end">
+                                <!-- <h5 class="m-0 p-0 px-2">
+                                    <i class="fa fa-pencil text-info btn m-0 p-0" data-toggle="tooltip" data-placement="bottom" title="Edit todo"></i>
+                                </h5> -->
+                                <!-- <h5 class="m-0 p-0 px-2">
+                                    <i class="fa fa-trash-o text-danger btn m-0 p-0" data-toggle="tooltip" data-placement="bottom" title="Delete todo"></i>
+                                </h5> -->
+                            </div>
+                            <div class="row todo-created-info">
+                                <div class="col-auto d-flex align-items-center pr-2">
+                                    <!-- <i class="fa fa-info-circle my-2 px-2 text-black-50 btn" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Created date"></i> -->
+                                    <label class="date-label my-2 text-black-50">{{ $r.Appointment }}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{ end }}
+            </div>  
+        </div>  
+    </div>
+
+    <!-- <footer>
         &copy;MEDILINK 2023 ALL RIGHTS RESERVED
-    </footer>
+    </footer> -->
 
     <script>
         function scheduleAppointment() {

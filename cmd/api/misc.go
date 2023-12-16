@@ -10,6 +10,7 @@ import (
 	"os"
 	"strconv"
 	"text/template"
+	"time"
 
 	"github.com/gorilla/mux"
 )
@@ -31,12 +32,6 @@ func (app *application) healthcheckHandler(w http.ResponseWriter, r *http.Reques
 }
 
 func (app *application) indexPageHandler(w http.ResponseWriter, r *http.Request) {
-	// _, err := app.getUserFromCookie(r)
-	// if err == nil {
-	// fmt.Println(user.Email)
-	// fmt.Println(user.Name)
-	// fmt.Println(user.Id)
-	// }
 
 	tmpl, err := template.ParseFiles("templates/build.html")
 	if err != nil {
@@ -61,7 +56,7 @@ func (app *application) checkUser(handler http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		_, err := app.getUserFromCookie(r)
 		if err != nil {
-			http.Redirect(w, r, "/login", http.StatusNotFound)
+			http.Redirect(w, r, "http://localhost:8000/login", http.StatusNotFound)
 		}
 		handler.ServeHTTP(w, r)
 	})
@@ -156,4 +151,10 @@ func (app *application) tryHandler(w http.ResponseWriter, r *http.Request) {
 func (app *application) tryUploadHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl, _ := template.ParseFiles("templates/target.html")
 	tmpl.Execute(w, nil)
+}
+
+func (app *application) ConvertToIST(inTime time.Time) time.Time {
+	istTime := time.Hour*5 + time.Minute*30
+	outTime := inTime.Local().Add(-istTime)
+	return outTime
 }

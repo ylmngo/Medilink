@@ -62,9 +62,6 @@ func (app *application) prescriptionUploadHandler(w http.ResponseWriter, r *http
 
 		tmpl.Execute(w, nil)
 	} else {
-		// Practice tryouts
-		// res, _ := httputil.DumpRequest(r, false)
-		// fmt.Println(string(res))
 
 		if err := r.ParseMultipartForm(32 << 20); err != nil {
 			app.logger.Printf("Unable to parse multipart form: %v\n", err)
